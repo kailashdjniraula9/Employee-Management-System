@@ -1,5 +1,5 @@
 package com.bway.springproject.dao;
-import java.util.ArrayList;
+
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,12 +50,17 @@ public class UserDaoImpl implements UserDao {
 	public boolean isUserValid(String username) {
 		Session ses = SessionFactory.getCurrentSession();
 		Criteria crt = ses.createCriteria(User.class);
-		crt.add(Restrictions.eq("username", username));
-		
-		
-			
-		return false;
-	}
+		crt.setProjection(Projections.distinct(Projections.property("username")));
+		List<String> usernames = crt.list();
 
+		for (String un : usernames) {
+
+			if (username.contentEquals(un)) {
+				return false;
+			}
+
+		}
+		return true;
+	}
 
 }
