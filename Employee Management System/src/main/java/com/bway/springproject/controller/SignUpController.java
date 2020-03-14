@@ -32,33 +32,39 @@ public class SignUpController {
 	public String userSignUp(@ModelAttribute User u, Model model, HttpSession session, HttpServletRequest req)
 			throws IOException {
 
-		String input = req.getParameter("g-recaptcha-response");
-		boolean result = VerifyRecaptcha.verify(input);
+		u.setPassword(DigestUtils.md5DigestAsHex(u.getPassword().getBytes()));
+		udao.userSignUP(u);
 
-		if (result) {
-
-			String un = req.getParameter("username");
-
-			if (udao.isUserValid(un))
-			{
-				u.setPassword(DigestUtils.md5DigestAsHex(u.getPassword().getBytes()));
-				udao.userSignUP(u);
-
-				return "login";
-			}
-			
-			else {
-				model.addAttribute("error", "UserName already Exist.");
-
-				return "signup";
-			}
-
-		} else {
-
-			model.addAttribute("error", "You are not Human!!!");
-
-			return "signup";
-		}
-	}
+		return "login";
+//		String input = req.getParameter("g-recaptcha-response");
+//		boolean result = VerifyRecaptcha.verify(input);
+//
+//		if (result) {
+//
+//			String un = req.getParameter("username");
+//			
+//			System.out.println(un);
+//
+//			if (udao.isUserValid(un))
+//			{
+//				u.setPassword(DigestUtils.md5DigestAsHex(u.getPassword().getBytes()));
+//				udao.userSignUP(u);
+//
+//				return "login";
+//			}
+//			
+//			else {
+//				model.addAttribute("error", "UserName already Exist.");
+//
+//				return "signup";
+//			}
+//
+//		} else {
+//
+//			model.addAttribute("error", "You are not Human!!!");
+//
+//			return "signup";
+//		}
+//	}
 
 }

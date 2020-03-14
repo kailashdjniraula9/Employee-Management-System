@@ -1,4 +1,5 @@
 package com.bway.springproject.dao;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -49,13 +50,8 @@ public class UserDaoImpl implements UserDao {
 		Session ses = SessionFactory.getCurrentSession();
 		Criteria crt = ses.createCriteria(User.class);
 		crt.add(Restrictions.eq("username", username));
-		List<User> un = crt.list();
-
-		if (un == null) {
-			
-			return true;
-			
-		}
+		
+		
 			
 		return false;
 	}
